@@ -19,7 +19,7 @@ public class StudentController {
     }
     @GetMapping("/hello")
     public String hello() {
-        return "Hello";
+        return "Hello World";
     }
 
     @GetMapping("/getid")
