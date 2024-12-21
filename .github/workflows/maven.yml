@@ -18,15 +18,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     services:
-      db:
-        image: mysql:8.0
+      postgres:
+        image: postgres:14
         ports:
-          - 3306:3306
+          - 5432:5432
         env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: testdb
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: testdb
         options: >-
-          --health-cmd "mysqladmin ping --silent"
+          --health-cmd "pg_isready -U postgres"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 3
@@ -39,11 +40,15 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: Wait for Database
+    - name: Wait for PostgreSQL
       run: sleep 15
+    - name: Verify PostgreSQL Connection
+      run: |
+        echo "Checking PostgreSQL connection..."
+        pg_isready -h localhost -p 5432 -U postgres
     - name: Build with Maven
       env:
-        DB_URL: jdbc:mysql://localhost:3306/testdb
-        DB_USER: root
-        DB_PASSWORD: root
+        DB_URL: jdbc:postgresql://localhost:5432/testdb
+        DB_USER: postgres
+        DB_PASSWORD: postgres
       run: mvn -B package --file backendservice/pom.xml
