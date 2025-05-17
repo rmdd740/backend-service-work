@@ -34,7 +34,7 @@ public class LoginService {
                     return "pass";
                 }
             } else {
-                return "invalid password";
+                return "invalid";
             }
 
         } else {
