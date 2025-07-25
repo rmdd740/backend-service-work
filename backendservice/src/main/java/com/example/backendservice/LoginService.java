@@ -59,25 +59,23 @@ public class LoginService {
         }
     }
 
-    public String generateOTP(String email) {
-        Random rand = new Random();
-        int max=9999, min=1000;
-        Optional<Login> login = loginRepository.findById(email);
-        if (login.isPresent()) {
-            Login l1 = login.get();
-            l1.setOtp(rand.nextInt(max - min + 1) + min);
-            loginRepository.save(l1);
-            EmailDetails details1 = new EmailDetails();
-            details1.setRecipient("rahath.marisetti@gmail.com");
-            details1.setMsgBody("This is your OTP:" + l1.getOtp() + "Please do not share with anyone."); // start from here in next class
-            return "OTP generated successfully";
+public String generateOTP(String email) {
+    java.security.SecureRandom rand = new java.security.SecureRandom();
+    int max=9999, min=1000;
+    Optional<Login> login = loginRepository.findById(email);
+    if (login.isPresent()) {
+        Login l1 = login.get();
+        l1.setOtp(rand.nextInt(max - min + 1) + min);
+        loginRepository.save(l1);
+        EmailDetails details1 = new EmailDetails();
+        details1.setRecipient("rahath.marisetti@gmail.com");
+        details1.setMsgBody("This is your OTP:" + l1.getOtp() + "Please do not share with anyone."); // start from here in next class
+        return "OTP generated successfully";
 
-        } else {
-            return "Invalid Email Address";
-        }
-
-
+    } else {
+        return "Invalid Email Address";
     }
+}
     public boolean validateOTP(Login login){
         String  l1  = login.getEmail();
         int l2 = login.getOtp();
