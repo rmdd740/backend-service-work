@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.*;
+import java.security.SecureRandom;
 
 
 @Service
@@ -60,7 +61,7 @@ public class LoginService {
     }
 
     public String generateOTP(String email) {
-        Random rand = new Random();
+        SecureRandom rand = new SecureRandom();
         int max=9999, min=1000;
         Optional<Login> login = loginRepository.findById(email);
         if (login.isPresent()) {
